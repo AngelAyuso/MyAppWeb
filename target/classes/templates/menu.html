@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<title>Biblioteca</title>
+	<link rel="stylesheet" th:href="@{/css/index.css}" />	
+</head>
+	<body>
+		
+		<!-- IF CUSTOMER IS LOGIN -->
+		<div th:if="${login != null and login}">
+		   
+		   	<a th:text="#{menu.usuario}"/><span th:text="${nombreUsuario}">User </span>
+		  	<a th:href="@{/perfil(idUsuario=${idUsuario})}" th:text="#{menu.perfil}"></a>
+		   
+			<a th:href="@{/logout}" th:text="#{menu.logout}"></a>
+			
+		</div>
+		
+		
+	</body>
+</html>

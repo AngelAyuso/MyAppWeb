@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<title>Biblioteca</title>
+	<link rel="stylesheet" th:href="@{/css/altaUsuario.css}" />	
+</head>
+<body>
+	<form th:action="@{editarPerfil}" th:object="${usuarioCA}" method="post" >
+		<div class="box">
+			<h1>Editar Usuario</h1>
+			Nombre:<input type="text" name="nombre" th:field="*{nombre}" class="inputAlta" /><br/>
+			Primer Apellido:<input type="text" name="primerApellido" th:field="*{primerApellido}" class="inputAlta" /><br/>
+			Segundo Apellido:<input type="text" name="segundoApellido" th:field="*{segundoApellido}" class="inputAlta" /><br/>
+			DNI:<input type="text" name="dni" th:field="*{dni}" class="inputAlta" /><br/>
+				<small th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></small>
+			Email:<input type="text" name="email" th:field="*{email}" class="inputAlta" /><br/>
+			Teléfono:<input type="text" name="telefono" th:field="*{telefono}" class="inputAlta" /><br/>	
+			<input type="hidden" name="idusuario" th:field="*{idUsuario}"/>
+			<input type="submit" value="Editar"/>
+			<input type="button" onclick="history.back()" name="volver" value="volver">	
+		</div>
+	</form>
+</body>
+</html>
