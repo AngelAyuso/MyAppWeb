@@ -13,6 +13,7 @@ import com.myappweb.utilidades.Constantes;
 import com.myappweb.utilidades.UtilGenericos;
 
 import services.UsuarioServ;
+import utils.Data;
 import generics.ServResultadoOUT;
 
 @Component
@@ -38,24 +39,31 @@ public class UsuarioModel {
 		logger.info("UsuarioModel.login -     user - " + user);
 		logger.info("UsuarioModel.login -     pwd - " + pwd);
 		
-	      // Comprueba formato DNI
-	      Pattern p = Pattern.compile("[0-9]{7,8}[A-Za-z]");
-	      Matcher m = p.matcher(user);
-	      
-	      ServResultadoOUT resultadoSRVBean;
-	      CAResultadoOUT resultadoCABean = new CAResultadoOUT();
-	      if (m.find()) {
-	    	  resultadoSRVBean = usuarioServ.getUsuarioByNifOrEmail(user, null);
-	      } else {
-	    	  resultadoSRVBean = usuarioServ.getUsuarioByNifOrEmail(null, user);
-	      }
-	      
-	      if(Constantes.CONS_RESULTADO_OK.equals(resultadoSRVBean.getResultado())) {
-	    	  resultadoCABean.setUsuario(utilGenericos.convertUserBDtoModel(resultadoSRVBean.getUsuario()));
-	    	  resultadoCABean.setResultado(Constantes.CONS_RESULTADO_OK);
-	      } else {
-	    	  resultadoCABean.setResultado(Constantes.CONS_RESULTADO_KO);
-	      }
+		 CAResultadoOUT resultadoCABean = new CAResultadoOUT();
+		 if(Data.isValid(user) && Data.isValid(pwd)) {
+		
+		      // Comprueba formato DNI
+		      Pattern p = Pattern.compile("[0-9]{7,8}[A-Za-z]");
+		      Matcher m = p.matcher(user);
+		      
+		      ServResultadoOUT resultadoSRVBean;
+		     
+		      if (m.find()) {
+		    	  resultadoSRVBean = usuarioServ.getUsuarioByNifOrEmail(user, null);
+		      } else {
+		    	  resultadoSRVBean = usuarioServ.getUsuarioByNifOrEmail(null, user);
+		      }
+		      
+		      if(Constantes.CONS_RESULTADO_OK.equals(resultadoSRVBean.getResultado())) {
+		    	  resultadoCABean.setUsuario(utilGenericos.convertUserBDtoModel(resultadoSRVBean.getUsuario()));
+		    	  resultadoCABean.setResultado(Constantes.CONS_RESULTADO_OK);
+		      } else {
+		    	  resultadoCABean.setResultado(Constantes.CONS_RESULTADO_KO);
+		    	  resultadoCABean.setCodError(resultadoSRVBean.getCodError());
+		      }
+		 } else {
+			 resultadoCABean.setResultado(Constantes.CONS_RESULTADO_KO);
+		 }
 	      
 	      logger.info("UsuarioModel.login - FIN");
 	      
@@ -133,7 +141,7 @@ public class UsuarioModel {
 					if(resultadoSRVBean.getUsuario() != null) {
 						existeUsuario = Boolean.valueOf(true);
 						resultadoCABean.setResultado(Constantes.CONS_RESULTADO_KO);
-						logger.info("UsuarioModel.altaUsuarioForm -   Existe uruario con Email " + usuarioAux.getEmail());
+						logger.info("UsuarioModel.altaUsuarioForm -   Existe usuario con Email " + usuarioAux.getEmail());
 					}
 				} else {
 					resultadoCABean.setResultado(Constantes.CONS_RESULTADO_KO);
@@ -147,8 +155,13 @@ public class UsuarioModel {
 		if(!existeUsuario) {
 			logger.info("UsuarioModel.altaUsuarioForm -   Se invoca usuarioServ.insertUsuario");
 			resultadoSRVBean = usuarioServ.insertUsuario(utilGenericos.convertUserModeltoBD(usuario));
-			if(Constantes.CONS_RESULTADO_KO.equals(resultadoSRVBean.getResultado())) {
+			if(Constantes.CONS_RESULTADO_OK.equals(resultadoSRVBean.getResultado())) {
 				resultadoCABean.setResultado(Constantes.CONS_RESULTADO_OK);
+				//Se devuelve el usuaro creado buscandolo por el NIF
+				resultadoSRVBean = usuarioServ.getUsuarioByNifOrEmail(usuario.getDni(), null);
+				if(Constantes.CONS_RESULTADO_OK.equals(resultadoSRVBean.getResultado())) {
+					resultadoCABean.setUsuario(utilGenericos.convertUserBDtoModel(resultadoSRVBean.getUsuario()));
+				}
 			} else {
 				resultadoCABean.setResultado(Constantes.CONS_RESULTADO_KO);
 			}

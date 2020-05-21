@@ -3,20 +3,16 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>Biblioteca</title>
-	<link rel="stylesheet" th:href="@{/css/index.css}" />	
+	<link rel="stylesheet" th:href="@{/css/menu.css}" />	
 </head>
 	<body>
-		
 		<!-- IF CUSTOMER IS LOGIN -->
 		<div th:if="${login != null and login}">
-		   
-		   	<a th:text="#{menu.usuario}"/><span th:text="${nombreUsuario}">User </span>
-		  	<a th:href="@{/perfil(idUsuario=${idUsuario})}" th:text="#{menu.perfil}"></a>
-		   
-			<a th:href="@{/logout}" th:text="#{menu.logout}"></a>
-			
+		   <div class="box">
+				<h1><a th:text="#{menu.title}"/></h1>
+				  	<a th:href="@{/perfil(idUsuario=${idUsuario})}" th:text="#{menu.update}"></a> </br></br>
+					<a th:href="@{/logout}" th:text="#{menu.logout}"></a>
+			</div>
 		</div>
-		
-		
 	</body>
 </html>

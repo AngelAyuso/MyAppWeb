@@ -14,7 +14,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 @Configuration
 public class ConfiguracionMensajes implements WebMvcConfigurer {
-	@Bean
+	  @Bean
 	  public LocaleResolver localeResolver() {
 	    SessionLocaleResolver localeResolver = new SessionLocaleResolver();
 	    localeResolver.setDefaultLocale(Locale.getDefault());
@@ -25,7 +25,7 @@ public class ConfiguracionMensajes implements WebMvcConfigurer {
 	  public LocaleChangeInterceptor localeChangeInterceptor() {
 	    LocaleChangeInterceptor localeInterceptor = new LocaleChangeInterceptor();
 	    localeInterceptor.setIgnoreInvalidLocale(true);
-	    localeInterceptor.setParamName("idioma");
+	    localeInterceptor.setParamName("lang");
 	    return localeInterceptor;
 	  }
 	  

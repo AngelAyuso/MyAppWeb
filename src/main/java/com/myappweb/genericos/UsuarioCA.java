@@ -91,5 +91,10 @@ public class UsuarioCA {
 	}
 	public void setDni(String dni) {
 		this.dni = dni;
-	}	
+	}
+	
+	public String toString() {
+        return String.format("idUsuario:"+idUsuario+"-nombre:"+nombre+"-primerApellido:"+primerApellido+"-segundoApellido:"+segundoApellido+
+        		"-email:"+email+"-telefono:"+telefono+"-dni:"+dni);
+    }
 }
